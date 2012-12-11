@@ -65,7 +65,7 @@ module Middleman
       alias :included :registered
 
       def generate
-        Parallel.each(options.redirects, :in_threads => 4) do |redirect|
+        options.redirects.each do |redirect|
           puts "Redirecting /#{redirect.from} to #{redirect.to}"
           bucket.files.create({
             :key => redirect.from,
@@ -95,8 +95,8 @@ module Middleman
       end
 
       module Helpers
-        def options
-          ::Middleman::S3Redirect.options
+        def redirect(from, to)
+          ::Middleman::S3Redirect.options.redirect(from, to)
         end
       end
     end
