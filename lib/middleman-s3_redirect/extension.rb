@@ -98,6 +98,10 @@ module Middleman
         def redirect(from, to)
           ::Middleman::S3Redirect.options.redirect(from, to)
         end
+
+        def s3_redirect_options
+          ::Middleman::S3Redirect.options
+        end
       end
     end
   end
