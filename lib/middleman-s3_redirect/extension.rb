@@ -40,7 +40,7 @@ module Middleman
       end
 
     end
-    
+
     class << self
       def options
         @@options
@@ -53,7 +53,7 @@ module Middleman
         @@options = options
 
         app.send :include, Helpers
-        
+
         options.public_path ||= "build"
 
         app.after_configuration do |config|
@@ -96,7 +96,7 @@ module Middleman
 
       module Helpers
         def redirect(from, to)
-          ::Middleman::S3Redirect.options.redirect(from, to)
+          s3_redirect_options.redirect(from, to)
         end
 
         def s3_redirect_options
