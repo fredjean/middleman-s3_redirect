@@ -46,6 +46,9 @@ The code is well structured and easy to understand and it was easy to
 extend it to add my synchronization code. My gratitude goes to @karlfreeman
 and is work on Middleman sync.
 
+Many thanks to [Junya Ogura](https://github.com/juno) for multiple pull
+requests improving this gem. 
+
 ## Contributing
 
 1. Fork it

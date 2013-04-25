@@ -6,7 +6,7 @@ require 'middleman-s3_redirect/version'
 Gem::Specification.new do |gem|
   gem.name          = "middleman-s3_redirect"
   gem.version       = Middleman::S3Redirect::VERSION
-  gem.authors       = ["Frederic Jean"]
+  gem.authors       = ["Frederic Jean", "Junya Ogura"]
   gem.email         = ["fred@fredjean.net"]
   gem.description   = %q{Generates redirects via S3 API.}
   gem.summary       = %q{Nothing to see here... Move along.}
