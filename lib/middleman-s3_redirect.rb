@@ -1,6 +1,5 @@
 require 'middleman-core'
 require 'fog'
-require 'parallel'
 require 'middleman-s3_redirect/version'
 require 'middleman-s3_redirect/commands'
 
