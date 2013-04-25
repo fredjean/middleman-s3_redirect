@@ -17,8 +17,8 @@ module Middleman
       desc "s3_redirect", "Creates redirect objects directly in S3."
       def s3_redirect
         shared_inst = ::Middleman::Application.server.inst
-        if (!shared_inst.respond_to?('s3_redirect_options') ||
-            !shared_inst.s3_redirect_options.bucket)
+        unless (shared_inst.respond_to?('s3_redirect_options') &&
+            shared_inst.s3_redirect_options.bucket)
           raise Thor::Error.new "You need to activate this extension."
         end
 
