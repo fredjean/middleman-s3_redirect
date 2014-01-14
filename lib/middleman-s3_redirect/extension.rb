@@ -7,6 +7,7 @@ module Middleman
       :public_path,
       :bucket,
       :region,
+      :path_style,
       :aws_access_key_id,
       :aws_secret_access_key,
       :after_build
@@ -55,6 +56,7 @@ module Middleman
         app.send :include, Helpers
 
         options.public_path ||= "build"
+        options.path_style = true if options.path_style.nil?
 
         app.after_configuration do |config|
           after_build do |builder|
@@ -82,7 +84,8 @@ module Middleman
           :provider => 'AWS',
           :aws_access_key_id => options.aws_access_key_id,
           :aws_secret_access_key => options.aws_secret_access_key,
-          :region => options.region
+          :region => options.region,
+          :path_style => options.path_style
         })
       end
 
