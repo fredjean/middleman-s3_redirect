@@ -13,6 +13,10 @@ module Middleman
       :after_build
     )
 
+      def initialize
+        self.read_config
+      end
+
       def redirect(from, to)
         redirects << RedirectEntry.new(from, to)
       end
@@ -22,6 +26,24 @@ module Middleman
       end
 
       protected
+
+      def read_config(io = nil)
+        unless io
+          root_path = ::Middleman::Application.root
+          config_file_path = File.join(root_path, ".s3_sync")
+
+          # skip if config file does not exist
+          return unless File.exists?(config_file_path)
+
+          io = File.open(config_file_path, "r")
+        end
+
+        config = YAML.load(io)
+
+        self.aws_access_key_id = config["aws_access_key_id"] if config["aws_access_key_id"]
+        self.aws_secret_access_key = config["aws_secret_access_key"] if config["aws_secret_access_key"]
+      end
+
       class RedirectEntry
         attr_reader :from, :to
         def initialize(from, to)
