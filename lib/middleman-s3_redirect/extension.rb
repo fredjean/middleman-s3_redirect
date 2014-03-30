@@ -2,16 +2,16 @@ require 'middleman-core'
 
 module Middleman
   module S3Redirect
-    class Options < Struct.new(
-      :prefix,
-      :public_path,
-      :bucket,
-      :region,
-      :path_style,
-      :aws_access_key_id,
-      :aws_secret_access_key,
-      :after_build
-    )
+    class Options
+      attr_accessor \
+        :prefix,
+        :public_path,
+        :bucket,
+        :region,
+        :path_style,
+        :aws_access_key_id,
+        :aws_secret_access_key,
+        :after_build
 
       def initialize
         self.read_config
