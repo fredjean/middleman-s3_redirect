@@ -37,7 +37,22 @@ The ```redirect``` method register a redirect:
 redirect '/old/path', '/new/path'
 ```
 
-You can then configure S3 to redirect these path by running  ```middleman s3_redirect```. 
+You can then configure S3 to redirect these path by running  ```middleman s3_redirect```.
+
+## AWS Authentication
+
+There are a few ways to provide the credentials to s3_redirect. They
+are:
+
+* Add a .s3_sync file at the root of the project.
+* Pass credentials via environment variables
+* Enter them directly into the config.rb file.
+
+### Credentials in .s3_sync file
+
+### Credentials Via Environment
+
+### Credentials in config.rb
 
 ## A Debt of Gratitude
 
@@ -47,7 +62,7 @@ extend it to add my synchronization code. My gratitude goes to @karlfreeman
 and is work on Middleman sync.
 
 Many thanks to [Junya Ogura](https://github.com/juno) for multiple pull
-requests improving this gem. 
+requests improving this gem.
 
 ## Contributing
 
