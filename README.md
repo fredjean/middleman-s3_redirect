@@ -39,20 +39,38 @@ redirect '/old/path', '/new/path'
 
 You can then configure S3 to redirect these path by running  ```middleman s3_redirect```.
 
-## AWS Authentication
+### Providing AWS Credentials
 
-There are a few ways to provide the credentials to s3_redirect. They
-are:
+There are a few ways to provide the AWS credentials for s3_redirect:
 
-* Add a .s3_sync file at the root of the project.
-* Pass credentials via environment variables
-* Enter them directly into the config.rb file.
+#### Through ```config.rb```
 
-### Credentials in .s3_sync file
+You can set the aws_access_key_id and aws_secret_access_key in the block
+that is passed to the activate method.
 
-### Credentials Via Environment
+#### Through ```.s3_sync``` File
 
-### Credentials in config.rb
+You can create a ```.s3_sync``` at the root of your middleman project.
+The credentials are passed in the YAML format. The keys match the
+options keys.
+
+The .s3_sync file takes precedence to the configuration passed in the
+activate method.
+
+A sample ```.s3_sync``` file is included at the root of this repo.
+
+#### Through Environment
+
+You can also pass the credentials through environment variables. They
+map to the following values:
+
+| Setting               | Environment Variable               |
+| --------------------- | ---------------------------------- |
+| aws_access_key_id     | ```ENV['AWS_ACCESS_KEY_ID```       |
+| aws_secret_access_key | ```ENV['AWS_SECRET_ACCESS_KEY']``` |
+
+The environment is used when the credentials are not set in the activate
+method or passed through the ```.s3_sync``` configuration file.
 
 ## A Debt of Gratitude
 
