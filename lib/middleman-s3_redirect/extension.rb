@@ -15,6 +15,9 @@ module Middleman
 
       def initialize
         self.read_config
+
+        self.aws_access_key_id ||= ENV['AWS_ACCESS_KEY_ID']
+        self.aws_secret_access_key ||= ENV['AWS_SECRET_ACCESS_KEY']
       end
 
       def redirect(from, to)
