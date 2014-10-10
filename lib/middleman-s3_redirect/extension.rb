@@ -57,8 +57,7 @@ module Middleman
             path << '/' unless path =~ /\/$/
             path << 'index.html'
           end
-          path = path[1..path.length] if path[0] = '/'
-          path
+          path.sub(/^\//, '')
         end
       end
 
