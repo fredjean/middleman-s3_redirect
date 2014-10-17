@@ -56,11 +56,7 @@ module Middleman
 
         protected
         def normalize(path)
-          unless path =~ /\.html$/
-            path << '/' unless path =~ /\/$/
-            path << 'index.html'
-          end
-          path.sub(/^\//, '')
+          path.sub(/\/?$/, '/index.html').sub(/^\//, '')
         end
       end
 
