@@ -56,10 +56,10 @@ module Middleman
 
         protected
         def normalize(path)
-          unless path =~ /\.html$/
-            path << '/' unless path =~ /\/$/
-            path << 'index.html'
-          end
+          # paths without a slash are preserved as is: e.g. path => path, or path.html => path.html
+          # paths with a slash get an index.html: e.g. path/ => path/index.html
+          # paths with a preceding slash, have the preceding slash removed
+          path << 'index.html' if path =~ /\/$/
           path.sub(/^\//, '')
         end
       end
