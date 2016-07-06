@@ -51,7 +51,7 @@ module Middleman
         attr_reader :from, :to
         def initialize(from, to)
           @from = normalize(from)
-          @to = to
+          @to = URI.encode(to)
         end
 
         protected
