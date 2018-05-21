@@ -107,17 +107,26 @@ module Middleman
       end
 
       def connection
-        options = {
-          :provider => 'AWS',
-          :aws_access_key_id => options.aws_access_key_id,
-          :aws_secret_access_key => options.aws_secret_access_key,
+        connection_options = {
           :region => options.region,
           :path_style => options.path_style
         }
-        
-        options.merge!({:aws_session_token => options.aws_session_token}) if options.aws_session_token
 
-        @connection ||= Fog::Storage.new(options)
+        if options.aws_access_key_id && options.aws_secret_access_key
+          connection_options.merge!({
+            :aws_access_key_id => options.aws_access_key_id,
+            :aws_secret_access_key => options.aws_secret_access_key
+          })
+
+          # If using a assumed role
+          connection_options.merge!({
+            :aws_session_token => options.aws_session_token
+          }) if options.aws_session_token
+        else
+          connection_options.merge!({ :use_iam_profile => true })
+        end
+
+        @connection ||= Fog::Storage::AWS.new(connection_options)
       end
 
       def bucket
