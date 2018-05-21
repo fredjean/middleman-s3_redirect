@@ -11,6 +11,7 @@ module Middleman
         :path_style,
         :aws_access_key_id,
         :aws_secret_access_key,
+        :aws_session_token,
         :after_build
 
       def initialize
@@ -18,6 +19,7 @@ module Middleman
 
         self.aws_access_key_id ||= ENV['AWS_ACCESS_KEY_ID']
         self.aws_secret_access_key ||= ENV['AWS_SECRET_ACCESS_KEY']
+        self.aws_session_token ||= (ENV['AWS_SESSION_TOKEN'] || ENV['AWS_SECURITY_TOKEN'])
       end
 
       def redirect(from, to)
@@ -45,6 +47,7 @@ module Middleman
 
         self.aws_access_key_id = config["aws_access_key_id"] if config["aws_access_key_id"]
         self.aws_secret_access_key = config["aws_secret_access_key"] if config["aws_secret_access_key"]
+        self.aws_session_token = config["aws_session_token"] if config["aws_session_token"]
       end
 
       class RedirectEntry
@@ -104,13 +107,17 @@ module Middleman
       end
 
       def connection
-        @connection ||= Fog::Storage.new({
+        options = {
           :provider => 'AWS',
           :aws_access_key_id => options.aws_access_key_id,
           :aws_secret_access_key => options.aws_secret_access_key,
           :region => options.region,
           :path_style => options.path_style
-        })
+        }
+        
+        options.merge!({:aws_session_token => options.aws_session_token}) if options.aws_session_token
+
+        @connection ||= Fog::Storage.new(options)
       end
 
       def bucket
