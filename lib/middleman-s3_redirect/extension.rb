@@ -100,11 +100,10 @@ module Middleman
           puts "Redirecting /#{redirect.from} to #{redirect.to}"
           bucket.files.create({
             :key => redirect.from,
-            :public => acl ? nil : true,
-            :acl => acl,
+            :acl => options.acl,
             :body => '',
             'x-amz-website-redirect-location' => "#{redirect.to}"
-          })
+          }.merge(options.acl ? {} : {public: true}))
         end
       end
 
