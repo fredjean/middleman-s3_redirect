@@ -12,7 +12,8 @@ module Middleman
         :aws_access_key_id,
         :aws_secret_access_key,
         :aws_session_token,
-        :after_build
+        :after_build,
+        :acl
 
       def initialize
         self.read_config
@@ -48,6 +49,7 @@ module Middleman
         self.aws_access_key_id = config["aws_access_key_id"] if config["aws_access_key_id"]
         self.aws_secret_access_key = config["aws_secret_access_key"] if config["aws_secret_access_key"]
         self.aws_session_token = config["aws_session_token"] if config["aws_session_token"]
+        self.acl = config["acl"] ? config["acl"] : 'public-read'
       end
 
       class RedirectEntry
@@ -98,8 +100,8 @@ module Middleman
           puts "Redirecting /#{redirect.from} to #{redirect.to}"
           bucket.files.create({
             :key => redirect.from,
-            :public => true,
-            :acl => 'public-read',
+            :public => acl ? nil : true,
+            :acl => acl,
             :body => '',
             'x-amz-website-redirect-location' => "#{redirect.to}"
           })
