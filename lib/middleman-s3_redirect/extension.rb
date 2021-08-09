@@ -11,13 +11,16 @@ module Middleman
         :path_style,
         :aws_access_key_id,
         :aws_secret_access_key,
-        :after_build
+        :aws_session_token,
+        :after_build,
+        :acl
 
       def initialize
         self.read_config
 
         self.aws_access_key_id ||= ENV['AWS_ACCESS_KEY_ID']
         self.aws_secret_access_key ||= ENV['AWS_SECRET_ACCESS_KEY']
+        self.aws_session_token ||= (ENV['AWS_SESSION_TOKEN'] || ENV['AWS_SECURITY_TOKEN'])
       end
 
       def redirect(from, to)
@@ -45,6 +48,8 @@ module Middleman
 
         self.aws_access_key_id = config["aws_access_key_id"] if config["aws_access_key_id"]
         self.aws_secret_access_key = config["aws_secret_access_key"] if config["aws_secret_access_key"]
+        self.aws_session_token = config["aws_session_token"] if config["aws_session_token"]
+        self.acl = config["acl"] ? config["acl"] : 'public-read'
       end
 
       class RedirectEntry
@@ -95,22 +100,34 @@ module Middleman
           puts "Redirecting /#{redirect.from} to #{redirect.to}"
           bucket.files.create({
             :key => redirect.from,
-            :public => true,
-            :acl => 'public-read',
+            :acl => options.acl,
             :body => '',
             'x-amz-website-redirect-location' => "#{redirect.to}"
-          })
+          }.merge(options.acl ? {} : {public: true}))
         end
       end
 
       def connection
-        @connection ||= Fog::Storage.new({
-          :provider => 'AWS',
-          :aws_access_key_id => options.aws_access_key_id,
-          :aws_secret_access_key => options.aws_secret_access_key,
+        connection_options = {
           :region => options.region,
           :path_style => options.path_style
-        })
+        }
+
+        if options.aws_access_key_id && options.aws_secret_access_key
+          connection_options.merge!({
+            :aws_access_key_id => options.aws_access_key_id,
+            :aws_secret_access_key => options.aws_secret_access_key
+          })
+
+          # If using a assumed role
+          connection_options.merge!({
+            :aws_session_token => options.aws_session_token
+          }) if options.aws_session_token
+        else
+          connection_options.merge!({ :use_iam_profile => true })
+        end
+
+        @connection ||= Fog::Storage::AWS.new(connection_options)
       end
 
       def bucket

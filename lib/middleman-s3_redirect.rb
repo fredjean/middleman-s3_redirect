@@ -1,5 +1,6 @@
 require 'middleman-core'
-require 'fog'
+require 'fog/aws'
+require 'fog/aws/storage'
 require 'middleman-s3_redirect/version'
 require 'middleman-s3_redirect/commands'
 
